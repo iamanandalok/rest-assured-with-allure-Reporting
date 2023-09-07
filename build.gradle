@@ -1,0 +1,52 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+
+    // Java 11 compatibility
+    targetCompatibility = '11'
+    sourceCompatibility = '11'
+    compileOnly 'org.projectlombok:lombok:1.18.26'
+    annotationProcessor 'org.projectlombok:lombok:1.18.26'
+    implementation 'org.projectlombok:lombok:1.18.26'
+    testImplementation 'org.projectlombok:lombok:1.18.26'
+
+    // REST Assured and related dependencies
+    implementation 'io.rest-assured:rest-assured:5.3.0'
+    implementation 'io.rest-assured:json-path:5.3.0'
+    implementation 'io.rest-assured:xml-path:5.3.0'
+
+    // Allure dependencies for reporting
+    testImplementation 'io.qameta.allure:allure-junit5:2.21.0'
+    testImplementation 'io.qameta.allure:allure-rest-assured:2.21.0'
+
+    // JUnit 5 for testing
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+}
+
+application {
+    mainClassName = 'com.example.APITest' // Specify your main class here
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "PASSED", "FAILED", "SKIPPED"
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+tasks.withType(Test) {
+    systemProperty 'allure.results.directory', buildDir.absolutePath + '/allure-results'
+}
